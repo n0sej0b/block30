@@ -1,0 +1,151 @@
+body {
+  font-family: Georgia, serif;
+  background-color: #f8f8f8;
+  margin: 0;
+  padding: 0;
+}
+
+#logo-image {
+  width: 30px;
+  margin-right: 10px;
+}
+
+.App {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  background-color: #333;
+  
+}
+
+form {
+  display: flex;
+  flex-direction:column;
+  max-width: 100vh;
+  margin: 0 auto;
+  gap: 10px;
+}
+
+input {
+  padding: 10px;
+  margin: 5px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border:#333;
+  border-style: double;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:disabled {
+  background-color: #ddd;
+}
+
+h1 {
+  color: #333;
+}
+
+h2 {
+  color: #4CAF50;
+}
+
+.LBox {
+  max-width: 100%;
+  display: inline-block;
+
+
+}
+.input-fields {
+  display: flex;
+  justify-content: space-between; 
+  gap: 20px; 
+}
+.input-group {
+  flex: 1; 
+}
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+div.error {
+  color: red;
+}
+
+.background-container {
+  background-image: url('./assets/LIbrary.jpg');   
+  background-size: cover; 
+  background-position: center; 
+  height: 100dvh;
+  width: 100%;
+  display: flex;
+  
+  
+}
+.Register:hover {
+  cursor: pointer;;
+  
+}
+.navbar {
+  background-color: #333;
+  padding: 1rem;
+}
+
+.navbar-list {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+}
+
+.navbar-item {
+  margin: 0 10px;
+}
+
+.navbar-link {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.navbar-link:hover {
+  color: #f0f0f0;
+}
+
+.bContainer {
+  display: grid;
+  place-items: center; /* Centers grid both horizontally and vertically */
+  
+}
+.grid-container {
+  display:grid;
+  grid-template-columns: repeat(6, 1fr);
+  
+  gap: 10px; 
+  width: 100%;
+  
+}
+
+.grid-item {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+  
+}
+/* Add your own custom styles here */
