@@ -1,129 +1,125 @@
-/* TODO - add your code to create a functional React component that renders a registration form */
-
-
-import React, { useState } from 'react';
-import App from '../App.jsx';
-
-
-
-
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
-  // Declare state variables for form fields and validation
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isRegistered, setIsRegistered] = useState(false);
+  const navigate = useNavigate();
 
-  // Form submission handler
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     // Basic form validation
-    if (password !== confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match!');
       setLoading(false);
       return;
     }
 
-    if (!name || !email || !password) {
+    if (!formData.name || !formData.email || !formData.password) {
       setError('All fields are required!');
       setLoading(false);
       return;
     }
 
-    
     try {
-      const response = await fetch('https://fsa-book-buddy-b6e748d1380d.herokuapp.com/docs/#-post-api-users-register', {
+      const response = await fetch('https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name,
-          email,
-          password,
+          firstname: formData.name,
+          lastname: formData.name,
+          email: formData.email,
+          password: formData.password,
         }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        setIsRegistered(true);
-        setLoading(false);
-        setName('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
+        // Redirect to login page on successful registration
+        navigate('/');
       } else {
-        setError('Failed to register. Please try again.');
-        setLoading(false);
+        setError(data.message || 'Failed to register. Please try again.');
       }
     } catch (err) {
       setError('Something went wrong! Please try again.');
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      {isRegistered ? (
-        <h2>Registration Successful! You can now log in.</h2>
-      ) : (
-        <div>
-          <h1>Create an Account</h1>
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="name">Name:</label>
-              <input
-                type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="password">Password:</label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="confirmPassword">Confirm Password:</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit" disabled={loading}>
-              {loading ? 'Registering...' : 'Register'}
-            </button>
-          </form>
-          {error && <div style={{ color: 'red' }}>{error}</div>}
+    <div className="register-container">
+      <h1>Create an Account</h1>
+      <form onSubmit={handleSubmit} className="register-form">
+        <div className="form-group">
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
         </div>
-      )}
+        <div className="form-group">
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="confirmPassword">Confirm Password:</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <button type="submit" disabled={loading} className="submit-button">
+          {loading ? 'Registering...' : 'Register'}
+        </button>
+      </form>
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 }

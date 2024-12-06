@@ -1,163 +1,97 @@
-import { useState } from 'react'
-import './index.css';
+import { useState } from "react";
+import "./index.css";
 import Register from "./components/Register.jsx";
 import Account from "./components/Account.jsx";
 import Books from "./components/Books.jsx";
 import Home from "./components/Home.jsx";
+import LoginForm from "./components/Login.jsx";
+import Navbar from "./Navbar";
+import {  BrowserRouter,  Routes,  Route,  Link,  useNavigate,  Navigate} from "react-router-dom";
 
 
-import Navbar from './Navbar';
-
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
-
-function App() {
-  
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+function AppContent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    
-    if (!username || !password) {
-      setError('Both fields are required!');
-      setLoading(false);
-      return;
-    }
-
-   
-    try {
-      
-      const BackendResponse = { username: '', password: '' };
-
-      
-      if (username === BackendResponse.username && password === BackendResponse.password) {
-        setIsLoggedIn(true);
-        setLoading(false);
-        setUsername('');
-        setPassword('');
-      } else {
-        setError('Invalid username or password');
-        setLoading(false);
-      }
-    } catch (err) {
-      setError('Something went wrong! Please try again.');
-      setLoading(false);
+  const handleLogin = (username, password) => {
+    if (username && password) {
+      setIsLoggedIn(true);
+      setError("");
+      navigate("/account");
+    } else {
+      setError("Please enter both username and password.");
     }
   };
-  
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    navigate("/");
+  };
 
   return (
-    
-  <BrowserRouter>
-    <div>
-      <Navbar />
-      
-    </div>
-   
-      
-    
-      
+    <>
+      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+      <Routes>
         
-
-
-        
-        
-      
-    
-      
-     
-    <div className="App">
-      <div >
-      <h1 style={{fontSize: "28px", backgroundColor: 'crimson', textAlign: 'center'}}>We Read Good</h1>
-      <div>
-          <h2>Login</h2>
-          <form onSubmit={handleLogin}>
-        <div className="input-fields">
-          <div className="input-group">
-            <label style={{color:'azure',textAlign: 'center'}} htmlFor="username">Username:</label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
+        <Route path="/" element={
+          <div className="App">
+            {!isLoggedIn ? (
+              <div className="LBox">
+                
+                <LoginForm onLogin={handleLogin} />
+                <br />
+                <div>
+                  <Link
+                    className="Register"
+                    style={{ fontSize: "28px", color: "cyan" }}
+                    to="/register"
+                  >
+                    Register
+                  </Link>
+                </div>
+                {error && <div style={{ color: "red" }}>{error}</div>}
+              </div>
+            ) : (
+              <div>
+                <h3>Welcome to your account!</h3>
+                <div>
+                  <Link to="/account">Go to Account</Link>
+                </div>
+                <div>
+                  <Link to="/books">View Books</Link>
+                </div>
+              </div>
+            )}
           </div>
-
-          <div className="input-group">
-            <label style={{color:'azure',textAlign: 'center'}} htmlFor="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </div>
-      </div>
-      
-      {!isLoggedIn ? (
-        <>
-        <div className='LBox'>
+        } />
+        <Route path="/register" element={<Register />} />
+        <Route 
+          path="/account" 
+          element= {<Account/>} />
+        <Route 
+          path="/books" 
+          element= {<Books/>} /> 
           
-          
-          <Link className='Register' style={{fontsize: '28px',color:'cyan'}} to="register">Register</Link>
-          <Routes>
-          
-          <Route path="/register" element={<Register />} />
-          <Route path="/Account" element={<Account />} />
-          <Route path="/Books" element={<Books />} />
-          
+          <Route path='/' element={<Home />} />
         
-         
-         </Routes>
-        
+      </Routes>
 
-      <br></br>
-          
-      
-            
-            
-          
-                   
-          {/* Error message */}
-          {error && <div style={{ color: 'red' }}>{error}</div>}
-        </div>
-      
-        <div style={{backgroundColor: 'crimson', height: '5px',width: '100%' }}></div>           
-  
-  <div className="background-container"></div>
+      <div
+        style={{ backgroundColor: "crimson", height: "5px", width: "100%" }}
+      />
+      <div className="background-container" />
+    </>
+  );
+}
 
-        
-        </>
-
-        
-      ) : (
-        <div>
-          <h2>Welcome, {username}!</h2>
-          <p>You are logged in.</p>
-        </div>
-      )}
-    </div>
-    
-     
-    
-</BrowserRouter>
-
-
-
-
+// Main App component
+function App() {
+  return (
+    <BrowserRouter>
+    <h2 style={{fontSize: "28px", backgroundColor: 'crimson', textAlign: 'center'}}>We Read Good</h2>
+      <AppContent />
+    </BrowserRouter>
   );
 }
 

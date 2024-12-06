@@ -5,6 +5,7 @@ import Account from "./Account.jsx";
 import Books from "./Books.jsx";
 
 
+
 import Navbar from '../Navbar';
 
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
@@ -118,7 +119,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/Account" element={<Account />} />
           <Route path="/Books" element={<Books />} />
-          {/* <Route path="/Contact" element={<Contact />} /> */}
+          
         
          
          </Routes>
